@@ -1,0 +1,128 @@
+n_gpu: 1
+
+arch:
+  type: 'BaselineTokenFusionPerModModelDistill'
+  args:
+    video_params:
+      embed_dim: 512
+    text_params:
+      embed_dim: 300
+    audio_params:
+      model: null
+
+    davenet_v2: true
+    stategy_audio_pooling: 'none'
+    use_norm_layers: true
+    add_masking_token_when_no_tokens: true
+    pre_projection: 'gated'
+    use_cls_tokens: false # this adds an extra token to the beginning
+    use_positional_emb: false
+    individual_projections: true
+    cross_modal: false
+    fusion_params:
+      masking_token: true
+      embed_dim: 512
+      num_modalities: 3
+      type_embedding: false
+      cls_token_per_pair: false
+      cls_token: true
+      depth: 2
+      num_heads: 4
+      mlp_ratio: 1
+      attention_ratio: 1
+      apply_norm_layer: false
+      use_attention_masks: true
+    projection_dim: 512
+    projection: 'gated'
+
+data_loader:
+  - type: FeatureDataloader
+    args:
+      num_workers: 16
+      batch_size: 64 # multilingual training only works with batch of 64.
+      shuffle: true
+      drop_last: true
+      dataset_name: 'YouCook2_new'
+
+      dataset_kwargs:
+        data_path: './data/youcook2/clip/youcook_train_audio_multilingual.pkl'
+        use_2D: True
+        use_3D: False
+        key_2d: '2d_raw'
+        max_words: 35 # match the setup with MSR-VTT
+        n_video_tokens: 30 # match the setup with MSR-VTT
+        sample_audio_clips: false
+        video_sampling_strategy: 'clip'
+        num_audio_frames: 10 # audio doesn't matter
+        num_frames_multiplier: 1
+        word2vec_path: './data/GoogleNews-vectors-negative300.bin'
+
+val_data_loader:
+  - type: FeatureDataloader
+    args:
+      num_workers: 16
+      batch_size: 16
+      shuffle: false
+      dataset_name: 'YouCook2_new'
+
+      dataset_kwargs:
+        data_path: './data/youcook2/clip/youcook_val_audio_multilingual.pkl'
+        use_2D: True
+        use_3D: False
+        key_2d: '2d_raw'
+        max_words: 40
+        n_video_tokens: 30 # match the setup with MSR-VTT
+        sample_audio_clips: false
+        video_sampling_strategy: 'clip'
+        num_audio_frames: 10 # audio doesn't matter
+        num_frames_multiplier: 1
+        word2vec_path: './data/GoogleNews-vectors-negative300.bin'
+
+optimizer:
+  type: Adam
+  args:
+    lr: 0.00005
+lr_scheduler:
+  type: ExponentialLR
+  args:
+    gamma: 0.9
+
+loss:
+  type: MultimodalNormSoftmaxLoss
+  args:
+    use_nonempty_mask: true
+    retrieval_weight: 1
+    tv_weight: 1 # NOTE: use only t-v for now while setting up the model
+    ta_weight: 0
+    va_weight: 0
+    temperature: 0.1 # Nina's default is 0.05, multilingual paper is 0.1 # NOTE: match the setup with MSR-VTT
+
+metrics: # NOTE: only use a subset of the metrics for now, can check more later
+- t2v_metrics
+- t2v_en_metrics
+- t2v_de_metrics
+- t2v_fr_metrics
+- t2v_cs_metrics
+- t2v_zh_metrics
+- t2v_ru_metrics
+- t2v_vi_metrics
+- t2v_es_metrics
+- t2v_ja_metrics
+
+trainer:
+  epochs: 25
+  use_eval_mode_always: false
+  resume_only_model: true
+  mixed_precision: true
+  save_latest: true
+  max_samples_per_epoch: 100000000
+  max_text_token_length: 100
+  save_dir: ./output
+  save_period: 100
+  verbosity: 2
+  monitor: 'off'
+  early_stop: 100
+  init_val: false
+  neptune: false
+visualizer:
+  type: ''

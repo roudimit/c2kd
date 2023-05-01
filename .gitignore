@@ -1,0 +1,9 @@
+.idea/
+.DS_store
+.*/__pycache__/
+__pycache__/
+data
+weights
+output
+.neptune/
+hf_cache
