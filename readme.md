@@ -5,14 +5,29 @@
 Multilingual text-video retrieval methods have improved significantly in recent years, but the performance for other languages lags behind English. We propose a Cross-Lingual Cross-Modal Knowledge Distillation method to improve multilingual text-video retrieval. Inspired by the fact that English text-video retrieval outperforms other languages, we train a student model using input text in different languages to match the cross-modal predictions from teacher models using input text in English. We propose a cross entropy based objective which forces the distribution over the student's text-video similarity scores to be similar to those of the teacher models. We introduce a new multilingual video dataset, Multi-YouCook2, by translating the English captions in the YouCook2 video dataset to 8 other languages. Our method improves multilingual text-video retrieval performance on Multi-YouCook2 and several other datasets such as Multi-MSRVTT and VATEX. We also conducted an analysis on the effectiveness of different multilingual text models as teachers.
 
 [Check out our ICASSP presentation on YouTube!](https://youtu.be/oZ-lch3Njpw)
-![alt text](arch.png)
+[![Architecture](assets/arch.png)](https://youtu.be/oZ-lch3Njpw)
+
+## Demos
+We support two demos:
+
+(1) Multilingual text-video retrieval: given a text query and a candidate set of videos, rank the videos according to the text-video similarity.
+[![retrieval](assets/retrieval.gif)](https://colab.research.google.com/drive/1yeyjrzAP5VQCtHF6xZNuH2MjRzwMgeNR?usp=sharing)
+
+(2) Multilingual text-video moment detection: given a text query and clips from a single video, find the most relevant clips in the video according to the text-video similarity.
+[![moment detection](assets/moment_detection.gif)](https://colab.research.google.com/drive/1iMMhfG9qEj2RiC60T8VLF3xsJaPYsLH3?usp=sharing)
+
+The model we demo was trained on MultiMSRVTT on text-video pairs in English, Dutch, French, Mandarin, Czech, Russian, Vietnamese, Swahili, and Spanish. However, thanks to LaBSE's pre-training on over 100 languages (https://aclanthology.org/2022.acl-long.62.pdf), text-video retrieval works in many more languages like Ukrainian and Igbo (shown in the demo). You can try it in whatever language you speak / write.
+
+Multilingual text-video retrieval demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1yeyjrzAP5VQCtHF6xZNuH2MjRzwMgeNR?usp=sharing)
+
+Multilingual video moment detection demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1iMMhfG9qEj2RiC60T8VLF3xsJaPYsLH3?usp=sharing)
+
+## Get started
 
 Repository contains:
 * code for the main experiments
 * model weights to obtain main results
 * data for fine-tuning and evaluation on the Multi-MSRVTT, Multi-YouCook2, Vatex, and RUDDER datasets
-
-## Get started
 
 1. Create an environment (tested on May 1st, 2023):
    ```
