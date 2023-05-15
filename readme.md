@@ -59,11 +59,13 @@ If you want to activate this:
 If you use this code in your research, please cite:
 
 ```bibtex
-@article{rouditchenko2022c2kd,
+@inproceedings{rouditchenko2023c2kd,
   title={C2KD: Cross-Lingual Cross-Modal Knowledge Distillation for Multilingual Text-Video Retrieval},
   author={Rouditchenko, Andrew and Chuang, Yung-Sung and Shvetsova, Nina and Thomas, Samuel and Feris, Rogerio and Kingsbury, Brian and Karlinsky, Leonid and Harwath, David and Kuehne, Hilde and Glass, James},
-  journal={arXiv preprint arXiv:2210.03625},
-  year={2022}
+  booktitle={ICASSP 2023-2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages={1--5},
+  year={2023},
+  organization={IEEE}
 }
 ```
 
